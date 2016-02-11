@@ -8,21 +8,21 @@ use URI;
 
 sub geturl{
   my $i = 1;
-  my @array;
+  my @res_array;
   for my $i (1..10){
     my $uri = "http://tabetoku.com/index.asp?pg=$i&class=&keyword=";
     wq($uri)->find('tr')->each(sub{ 
-        my ($i, $trelem) = @_;
-        my @trelem;
-        $trelem->find('b')->each(sub{
-            my ($j, $tdelem) = @_;
-            if ($tdelem->as_html =~ /href="(.+?)" target=".*?">(.+)<\/a><\/b>/){
-              push @trelem, [$2, 'tabetoku.com/'.$1];
+        my ($i, $tr_element) = @_;
+        my @td_elements;
+        $tr_element->find('b')->each(sub{
+            my ($j, $td_element) = @_;
+            if ($td_element->as_html =~ /href="(.+?)" target=".*?">(.+)<\/a><\/b>/){
+              push @td_elements, [$2, 'tabetoku.com/'.$1];
             }
           });
-        push @array, \@trelem if @trelem > 0;
+        push @res_array, \@td_elements if @td_elements > 0;
       });
   }
-return \@array;
+return \@res_array;
 }
 1;
